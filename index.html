@@ -1020,6 +1020,33 @@
       }
     });
   </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const toggleBtns = document.querySelectorAll('.toggle-mode');
+      const pageWrap = document.querySelector('.page-wrap');
+      const iconDarks = document.querySelectorAll('.icon-wrap-mode.dark');
+      const iconLights = document.querySelectorAll('.icon-wrap-mode.light');
+      
+      function updateIcons() {
+        const isLight = pageWrap.classList.contains('light-mode');
+        iconDarks.forEach(icon => icon.style.display = isLight ? 'flex' : 'none');
+        iconLights.forEach(icon => icon.style.display = isLight ? 'none' : 'flex');
+      }
+      
+      if (pageWrap) {
+        updateIcons();
+        toggleBtns.forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            pageWrap.classList.toggle('light-mode');
+            updateIcons();
+          });
+        });
+      }
+    });
+  </script>
 </body>
+
 
 </html>
