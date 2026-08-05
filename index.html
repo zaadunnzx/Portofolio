@@ -55,6 +55,13 @@
       visibility: hidden !important;
       opacity: 0 !important;
     }
+
+    /* Fix Toggle Mode Visibility */
+    .mode-button { cursor: pointer; }
+    .page-wrap.light-mode .icon-wrap-mode.dark { display: flex !important; }
+    .page-wrap.light-mode .icon-wrap-mode.light { display: none !important; }
+    .page-wrap:not(.light-mode) .icon-wrap-mode.dark { display: none !important; }
+    .page-wrap:not(.light-mode) .icon-wrap-mode.light { display: flex !important; }
   </style>
 </head>
 
@@ -440,6 +447,87 @@
                 </div>
                 <div class="link-hidden-text">
                   <div>View Project</div>
+                </div>
+              </a>
+            </div>
+
+            <!-- Real-Time Collab Editor -->
+            <div role="listitem" class="w-dyn-item">
+              <a href="https://github.com/USERNAME-KAMU/crdt-backend-portfolio" target="_blank" class="work-card-link w-inline-block">
+                <div class="image-wrap-work-card">
+                  <img src="https://images.unsplash.com/photo-1607706189992-eae578626c86?q=80&w=600&auto=format&fit=crop" loading="lazy"
+                    alt="Collab Editor" class="image-cover">
+                </div>
+                <div class="content-work-card">
+                  <div class="tag-wrap-work-card">
+                    <div class="tag-work">
+                      <div class="text-small">Backend</div>
+                    </div>
+                    <div class="tag-work">
+                      <div class="text-small">WebSockets & CRDT</div>
+                    </div>
+                  </div>
+                  <div class="text-wrap-work-card">
+                    <div class="text-large text-body-bold">Real-Time Collab Editor</div>
+                    <div class="body-medium">Built a highly concurrent, real-time document synchronization server using Yjs CRDT, WebSockets, and SQLite persistence.</div>
+                  </div>
+                </div>
+                <div class="link-hidden-text">
+                  <div>View on GitHub</div>
+                </div>
+              </a>
+            </div>
+
+            <!-- URL Shortener API -->
+            <div role="listitem" class="w-dyn-item">
+              <a href="https://github.com/USERNAME-KAMU/url-shortener-api" target="_blank" class="work-card-link w-inline-block">
+                <div class="image-wrap-work-card">
+                  <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop" loading="lazy"
+                    alt="URL Shortener Analytics" class="image-cover">
+                </div>
+                <div class="content-work-card">
+                  <div class="tag-wrap-work-card">
+                    <div class="tag-work">
+                      <div class="text-small">Backend API</div>
+                    </div>
+                    <div class="tag-work">
+                      <div class="text-small">Supabase PostgreSQL</div>
+                    </div>
+                  </div>
+                  <div class="text-wrap-work-card">
+                    <div class="text-large text-body-bold">URL Shortener + Analytics</div>
+                    <div class="body-medium">Engineered a RESTful URL Shortener with real-time analytics, user-agent parsing, and integrated with Supabase PostgreSQL cloud database.</div>
+                  </div>
+                </div>
+                <div class="link-hidden-text">
+                  <div>View on GitHub</div>
+                </div>
+              </a>
+            </div>
+
+            <!-- API Gateway & Rate Limiter -->
+            <div role="listitem" class="w-dyn-item">
+              <a href="https://github.com/USERNAME-KAMU/api-gateway-rate-limiter" target="_blank" class="work-card-link w-inline-block">
+                <div class="image-wrap-work-card">
+                  <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?q=80&w=600&auto=format&fit=crop" loading="lazy"
+                    alt="API Gateway" class="image-cover">
+                </div>
+                <div class="content-work-card">
+                  <div class="tag-wrap-work-card">
+                    <div class="tag-work">
+                      <div class="text-small">Security</div>
+                    </div>
+                    <div class="tag-work">
+                      <div class="text-small">Node.js Gateway</div>
+                    </div>
+                  </div>
+                  <div class="text-wrap-work-card">
+                    <div class="text-large text-body-bold">API Gateway & Rate Limiter</div>
+                    <div class="body-medium">Built a custom proxy server featuring an in-memory sliding window rate limiter from scratch, defending backend systems against spam and DDoS attacks.</div>
+                  </div>
+                </div>
+                <div class="link-hidden-text">
+                  <div>View on GitHub</div>
                 </div>
               </a>
             </div>
@@ -1023,33 +1111,17 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const toggleBtns = document.querySelectorAll('.mode-button');
-      const pageWrap = document.querySelector('.page-wrap');
-      const iconDarks = document.querySelectorAll('.icon-wrap-mode.dark');
-      const iconLights = document.querySelectorAll('.icon-wrap-mode.light');
-      
-      function updateIcons() {
-        if (!pageWrap) return;
-        const isLight = pageWrap.classList.contains('light-mode');
-        iconDarks.forEach(icon => {
-          icon.style.display = isLight ? 'flex' : 'none';
-        });
-        iconLights.forEach(icon => {
-          icon.style.display = isLight ? 'none' : 'flex';
-        });
-      }
-      
-      if (pageWrap) {
-        updateIcons();
-        toggleBtns.forEach(btn => {
-          btn.style.cursor = 'pointer';
-          btn.addEventListener('click', function(e) {
-            e.preventDefault();
+      // Use event delegation for the toggle button to handle cloned elements by Webflow
+      document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.mode-button');
+        if (btn) {
+          e.preventDefault();
+          const pageWrap = document.querySelector('.page-wrap');
+          if (pageWrap) {
             pageWrap.classList.toggle('light-mode');
-            updateIcons();
-          });
-        });
-      }
+          }
+        }
+      });
     });
   </script>
 </body>
