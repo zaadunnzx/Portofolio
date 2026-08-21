@@ -6,9 +6,50 @@
     <title>Smart Audio Summarizer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            green: '#274235',
+                            yellow: '#ffb703',
+                            light: '#fcfcfc',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
+        body { font-family: 'Outfit', sans-serif; scroll-behavior: smooth; }
+        .blob-bg {
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path fill="%23ffb703" d="M47.7,-64.7C61.4,-56.3,71.8,-42.6,76.5,-27.4C81.2,-12.3,80.1,4.3,74.5,19.3C68.9,34.3,58.8,47.8,45.3,57.1C31.7,66.4,15.9,71.5,-0.2,71.8C-16.3,72.1,-32.5,67.6,-46.8,58.6C-61.1,49.5,-73.4,36,-80.1,19.9C-86.8,3.8,-87.8,-14.8,-80.7,-30.2C-73.7,-45.6,-58.5,-57.8,-43.3,-65.7C-28.1,-73.6,-14,-77.2,1.2,-78.9C16.4,-80.5,33.9,-73.2,47.7,-64.7Z" transform="translate(100 100)" /></svg>') no-repeat center;
+            background-size: contain;
+            background-position: center;
+        }
+        .marquee-wrapper {
+            background: #ffb703;
+            overflow: hidden;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+        .marquee {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+        }
+        .marquee span { padding-right: 4rem; }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
         .loader {
-            border-top-color: #3498db;
+            border-top-color: #274235;
             -webkit-animation: spinner 1.5s linear infinite;
             animation: spinner 1.5s linear infinite;
         }
@@ -18,48 +59,220 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen font-sans text-gray-800">
-    <div class="max-w-6xl mx-auto px-4 py-12">
-        <header class="text-center mb-12">
-            <h1 class="text-4xl font-extrabold text-indigo-600 mb-4"><i class="fas fa-microphone-alt mr-3"></i>Smart Audio Summarizer</h1>
-            <p class="text-lg text-gray-600">Upload your meeting recording or lecture audio, and let AI transcribe and summarize it for you in seconds.</p>
-        </header>
+<body class="bg-brand-light text-brand-green overflow-x-hidden">
 
-        <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
-            <div id="dropzone" class="border-4 border-dashed border-indigo-200 rounded-xl p-12 text-center hover:bg-indigo-50 transition duration-300 cursor-pointer">
-                <i class="fas fa-cloud-upload-alt text-6xl text-indigo-400 mb-4"></i>
-                <h3 class="text-xl font-semibold mb-2">Drag and drop your audio file here</h3>
-                <p class="text-gray-500 mb-4">Supports MP3, WAV, M4A (Max 10MB)</p>
-                <input type="file" id="fileInput" class="hidden" accept=".mp3,.wav,.m4a">
-                <button class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition" onclick="document.getElementById('fileInput').click()">Browse Files</button>
+    <!-- Navbar -->
+    <div class="px-4 pt-6">
+        <nav class="bg-brand-green text-white rounded-full mx-auto px-6 py-3 max-w-6xl flex justify-between items-center shadow-lg">
+            <div class="flex items-center gap-3">
+                <div class="bg-brand-yellow text-brand-green w-10 h-10 rounded-full flex items-center justify-center font-black text-xl">S</div>
+                <span class="font-bold text-xl tracking-wide">SmartAudio.</span>
             </div>
-            <div id="fileName" class="text-center mt-4 font-medium text-gray-700 hidden"></div>
-        </div>
+            <div class="hidden md:flex gap-8 text-sm font-medium">
+                <a href="#" class="text-brand-yellow border-b-2 border-brand-yellow pb-1">Home</a>
+                <a href="#services" class="hover:text-brand-yellow transition">Services</a>
+                <a href="#about" class="hover:text-brand-yellow transition">About</a>
+            </div>
+            <button class="bg-white text-brand-green px-6 py-2 rounded-full font-bold text-sm hover:bg-gray-100 transition shadow">Try Now</button>
+        </nav>
+    </div>
 
-        <div class="text-center mb-8">
-            <button id="processBtn" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-3 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition duration-300 hidden">
-                <i class="fas fa-magic mr-2"></i> Transcribe & Summarize
-            </button>
+    <!-- Hero -->
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center py-16 px-6 gap-12">
+        <div class="md:w-1/2">
+            <div class="inline-block border border-dashed border-gray-400 text-gray-500 px-4 py-1.5 rounded-lg mb-6 font-medium text-sm">
+                <i class="fas fa-microphone-alt text-brand-yellow mr-2"></i> Hello There!
+            </div>
+            <h1 class="text-5xl lg:text-[4rem] font-extrabold leading-tight mb-6 tracking-tight">
+                I'm <span class="text-brand-yellow underline decoration-brand-yellow underline-offset-8">Smart Audio,</span> <br>
+                AI Summarizer <br> Based in Cloud.
+            </h1>
+            <p class="text-gray-500 mb-10 text-lg pr-4">
+                I'm an experienced AI agent with capabilities to transcribe and summarize your meeting recordings or lecture audio in seconds.
+            </p>
+            <div class="flex gap-4">
+                <button onclick="document.getElementById('fileInput').click()" class="bg-brand-green text-white px-8 py-3.5 rounded-full font-bold flex items-center gap-3 hover:bg-opacity-90 transition shadow-lg">
+                    Upload Audio <i class="fas fa-play-circle text-brand-yellow text-xl bg-white rounded-full"></i>
+                </button>
+                <button class="border border-brand-green text-brand-green px-8 py-3.5 rounded-full font-bold hover:bg-brand-green hover:text-white transition">
+                    How it works
+                </button>
+            </div>
         </div>
-
-        <div id="loading" class="hidden flex flex-col items-center justify-center py-12">
-            <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-24 w-24 mb-6"></div>
-            <h2 class="text-2xl font-semibold text-gray-700">AI is analyzing your audio...</h2>
-            <p class="text-gray-500 mt-2">This may take a minute depending on file length.</p>
-        </div>
-
-        <div id="results" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-white rounded-2xl shadow-lg p-8 border-t-4 border-indigo-500">
-                <h2 class="text-2xl font-bold mb-4 flex items-center text-indigo-600"><i class="fas fa-align-left mr-3"></i>Transcription</h2>
-                <div class="bg-gray-50 p-6 rounded-xl max-h-96 overflow-y-auto">
-                    <p id="transcriptText" class="text-gray-700 leading-relaxed whitespace-pre-wrap"></p>
+        
+        <div class="md:w-1/2 relative w-full flex justify-center items-center blob-bg min-h-[450px]">
+            <!-- Dropzone inside the hero -->
+            <div id="dropzone-container" class="bg-white bg-opacity-95 backdrop-blur-sm rounded-3xl shadow-xl p-8 w-full max-w-md relative z-10 border border-gray-100 transition-all duration-500">
+                <div class="absolute -right-5 -top-5 bg-brand-green text-white w-24 h-24 rounded-full flex flex-col items-center justify-center font-bold shadow-xl transform rotate-12 border-4 border-white">
+                    <i class="fas fa-magic text-brand-yellow mb-1 text-xl"></i>
+                    <span class="text-[11px] uppercase tracking-wider text-center leading-tight">AI<br>Powered</span>
+                </div>
+                
+                <div id="dropzone" class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:bg-gray-50 hover:border-brand-yellow transition duration-300 cursor-pointer group">
+                    <i class="fas fa-cloud-upload-alt text-5xl text-brand-green mb-4 group-hover:scale-110 transition"></i>
+                    <h3 class="text-xl font-bold mb-2">Drop your audio here</h3>
+                    <p class="text-gray-500 text-sm mb-6">Supports MP3, WAV, M4A (Max 10MB)</p>
+                    <input type="file" id="fileInput" class="hidden" accept=".mp3,.wav,.m4a">
+                    <button class="bg-brand-yellow text-brand-green px-6 py-2 rounded-full font-bold shadow hover:bg-yellow-400 transition" onclick="document.getElementById('fileInput').click(); event.stopPropagation();">Browse Files</button>
+                </div>
+                <div id="fileName" class="text-center mt-4 font-bold text-brand-green hidden"></div>
+                
+                <div class="text-center mt-6">
+                    <button id="processBtn" class="w-full bg-brand-green text-white px-6 py-3.5 rounded-full font-bold shadow-lg hover:bg-opacity-90 transition hidden flex items-center justify-center gap-2">
+                        <i class="fas fa-bolt text-brand-yellow"></i> Process Audio
+                    </button>
                 </div>
             </div>
             
-            <div class="bg-white rounded-2xl shadow-lg p-8 border-t-4 border-purple-500">
-                <h2 class="text-2xl font-bold mb-4 flex items-center text-purple-600"><i class="fas fa-list-ul mr-3"></i>AI Summary</h2>
-                <div class="bg-gray-50 p-6 rounded-xl max-h-96 overflow-y-auto">
-                    <p id="summaryText" class="text-gray-700 leading-relaxed whitespace-pre-wrap font-medium"></p>
+            <!-- Loading Indicator inside Hero -->
+            <div id="loading" class="hidden bg-white bg-opacity-95 backdrop-blur-sm rounded-3xl shadow-xl p-12 w-full max-w-md relative z-10 border border-gray-100 flex-col items-center justify-center text-center">
+                <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-100 h-20 w-20 mb-6 mx-auto"></div>
+                <h2 class="text-2xl font-bold text-brand-green mb-2">AI is analyzing...</h2>
+                <p class="text-gray-500 text-sm font-medium">This may take a minute depending on file length.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Marquee -->
+    <div class="marquee-wrapper border-y-4 border-brand-green py-3 mt-8">
+        <div class="marquee text-2xl font-black text-brand-green">
+            <span>Audio Transcription <i class="fas fa-asterisk text-brand-green mx-4 opacity-50 text-sm align-middle"></i> 
+            Smart Summarization <i class="fas fa-asterisk text-brand-green mx-4 opacity-50 text-sm align-middle"></i> 
+            Fast Processing <i class="fas fa-asterisk text-brand-green mx-4 opacity-50 text-sm align-middle"></i> 
+            AI Powered <i class="fas fa-asterisk text-brand-green mx-4 opacity-50 text-sm align-middle"></i>
+            Audio Transcription <i class="fas fa-asterisk text-brand-green mx-4 opacity-50 text-sm align-middle"></i> 
+            Smart Summarization <i class="fas fa-asterisk text-brand-green mx-4 opacity-50 text-sm align-middle"></i> 
+            Fast Processing <i class="fas fa-asterisk text-brand-green mx-4 opacity-50 text-sm align-middle"></i> 
+            AI Powered <i class="fas fa-asterisk text-brand-green mx-4 opacity-50 text-sm align-middle"></i></span>
+        </div>
+    </div>
+
+    <!-- Services / Results -->
+    <div id="services" class="max-w-6xl mx-auto py-24 px-6 relative">
+        <!-- Results Container (Hidden initially) -->
+        <div id="results" class="hidden">
+            <div class="flex items-center gap-2 text-gray-400 font-bold mb-2 uppercase tracking-wide text-sm">
+                <div class="w-6 h-[2px] bg-brand-yellow"></div> Results
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
+                <h2 class="text-4xl font-extrabold text-brand-green tracking-tight">Results <span class="text-brand-green opacity-90 font-medium">I Provide</span></h2>
+                <button class="bg-brand-green text-white px-6 py-2.5 rounded-full font-bold flex items-center gap-2 hover:bg-opacity-90 text-sm shadow">
+                    View All Results <i class="fas fa-arrow-right text-brand-yellow bg-white bg-opacity-20 rounded-full p-1"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Transcription Card -->
+                <div class="bg-white rounded-[2rem] shadow-xl p-8 hover:-translate-y-2 transition duration-300 border border-gray-100 group">
+                    <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-brand-green transition">
+                        <i class="fas fa-file-alt text-2xl text-brand-green group-hover:text-brand-yellow transition"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Transcription</h3>
+                    <div class="bg-gray-50 p-6 rounded-2xl max-h-80 overflow-y-auto custom-scrollbar">
+                        <p id="transcriptText" class="text-gray-500 leading-relaxed whitespace-pre-wrap text-sm"></p>
+                    </div>
+                    <button class="mt-6 text-brand-yellow font-bold flex items-center gap-2 text-sm hover:text-brand-green transition">
+                        Copy Text <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Summary Card -->
+                <div class="bg-white rounded-[2rem] shadow-xl p-8 hover:-translate-y-2 transition duration-300 border border-gray-100 group">
+                    <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-brand-green transition">
+                        <i class="fas fa-list-ul text-2xl text-brand-green group-hover:text-brand-yellow transition"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">AI Summary</h3>
+                    <div class="bg-gray-50 p-6 rounded-2xl max-h-80 overflow-y-auto custom-scrollbar">
+                        <p id="summaryText" class="text-gray-500 leading-relaxed whitespace-pre-wrap text-sm font-medium"></p>
+                    </div>
+                    <button class="mt-6 text-brand-yellow font-bold flex items-center gap-2 text-sm hover:text-brand-green transition">
+                        Copy Text <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Placeholder when no results -->
+        <div id="no-results" class="text-center py-12">
+            <div class="flex items-center justify-center gap-2 text-gray-400 font-bold mb-2 uppercase tracking-wide text-sm">
+                <div class="w-6 h-[2px] bg-brand-yellow"></div> Services
+            </div>
+            <h2 class="text-4xl font-extrabold text-brand-green tracking-tight mb-12">Services <span class="text-brand-green opacity-90 font-medium">I Provide</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Dummy Card 1 -->
+                <div class="bg-white rounded-[2rem] shadow-md p-8 border border-gray-100 text-left opacity-70 hover:-translate-y-2 transition duration-300">
+                    <div class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-closed-captioning text-brand-green"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Speech to Text</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">Convert your meeting recordings into highly accurate text transcripts instantly.</p>
+                </div>
+                <!-- Dummy Card 2 -->
+                <div class="bg-white rounded-[2rem] shadow-md p-8 border border-gray-100 text-left opacity-70 hover:-translate-y-2 transition duration-300">
+                    <div class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-compress-arrows-alt text-brand-green"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">AI Summarization</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">Extract the most important points and action items from long conversations.</p>
+                </div>
+                <!-- Dummy Card 3 -->
+                <div class="bg-white rounded-[2rem] shadow-md p-8 border border-gray-100 text-left opacity-70 hover:-translate-y-2 transition duration-300">
+                    <div class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-language text-brand-green"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Multi-language</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">Supports various languages and accents for global team collaboration.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer / About -->
+    <div class="bg-brand-green text-white py-20 px-6 rounded-t-[3rem]" id="about">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
+            <div class="md:w-5/12 flex justify-center">
+                <!-- Big circular badge matching the yellow circle in about section -->
+                <div class="w-80 h-80 bg-brand-yellow rounded-full flex flex-col items-center justify-center text-brand-green relative shadow-[0_0_50px_rgba(255,183,3,0.3)] border-[12px] border-white border-opacity-10">
+                    <div class="absolute -right-2 top-16 bg-white px-4 py-2 rounded-full text-xs font-bold shadow-xl border border-gray-100 flex items-center gap-2">
+                        <span class="w-2 h-2 bg-brand-yellow rounded-full"></span> Audio to Text
+                    </div>
+                    <div class="absolute -left-4 bottom-24 bg-brand-green text-white px-4 py-2 rounded-full text-xs font-bold shadow-xl border border-gray-700 flex items-center gap-2">
+                        <span class="w-2 h-2 bg-brand-yellow rounded-full"></span> AI Summary
+                    </div>
+                    <i class="fas fa-robot text-[5rem] mb-4 opacity-90"></i>
+                    <h3 class="font-extrabold text-2xl tracking-tight">SmartAudio.</h3>
+                </div>
+            </div>
+            <div class="md:w-7/12">
+                <div class="flex items-center gap-2 text-brand-yellow font-bold mb-3 text-sm uppercase tracking-wider">
+                    <div class="w-6 h-[2px] bg-brand-yellow"></div> About App
+                </div>
+                <h2 class="text-5xl font-extrabold mb-6 tracking-tight">What is <span class="text-brand-yellow italic font-medium">Smart Audio?</span></h2>
+                <p class="text-gray-300 mb-10 max-w-2xl text-lg leading-relaxed font-light">
+                    This tool uses state-of-the-art AI models (Whisper & DistilBART) to automatically transcribe spoken words and summarize the key points. It saves you hours of manual note-taking and lets you focus on the conversation.
+                </p>
+                
+                <div class="grid grid-cols-3 gap-8 border-b border-white border-opacity-20 pb-10 mb-8">
+                    <div>
+                        <div class="text-brand-yellow text-4xl font-black mb-2">600+</div>
+                        <div class="text-sm text-gray-300 font-medium tracking-wide">Mins Processed</div>
+                    </div>
+                    <div>
+                        <div class="text-brand-yellow text-4xl font-black mb-2">50+</div>
+                        <div class="text-sm text-gray-300 font-medium tracking-wide">Languages</div>
+                    </div>
+                    <div>
+                        <div class="text-brand-yellow text-4xl font-black mb-2">18+</div>
+                        <div class="text-sm text-gray-300 font-medium tracking-wide">AI Models</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between mt-8">
+                    <button class="bg-brand-yellow text-brand-green px-8 py-3 rounded-full font-bold flex items-center gap-3 hover:bg-yellow-400 transition shadow-lg">
+                        View GitHub <i class="fas fa-arrow-right bg-brand-green text-brand-yellow rounded-full w-6 h-6 flex items-center justify-center text-xs"></i>
+                    </button>
+                    <div class="font-['Outfit'] text-3xl font-black opacity-30 italic">SmartAudio.</div>
                 </div>
             </div>
         </div>
