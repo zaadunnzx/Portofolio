@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,105 +9,111 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        cyber: {
-                            900: '#0a0a0f',
-                            800: '#13131f',
-                            700: '#1c1c2e',
-                            neon: '#00f0ff',
-                            pink: '#ff003c',
-                            purple: '#b026ff'
-                        }
+                        cream: '#F2F0EB',
+                        brandBlue: '#3B3BE0',
+                        brandLime: '#C6F045',
+                        textDark: '#1A1A1A',
+                        textGray: '#4D4D4D'
                     },
                     fontFamily: {
                         sans: ['Space Grotesk', 'sans-serif'],
                         mono: ['Courier New', 'monospace']
-                    },
-                    animation: {
-                        'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        pulseGlow: {
-                            '0%, 100%': { opacity: 1, boxShadow: '0 0 10px #00f0ff' },
-                            '50%': { opacity: .5, boxShadow: '0 0 20px #00f0ff' },
-                        }
                     }
                 }
             }
         }
     </script>
     <style>
-        body { background-color: #0a0a0f; color: #e2e8f0; }
-        .glass-panel {
-            background: rgba(19, 19, 31, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05);
-        }
-        .neon-border { border: 1px solid #00f0ff; box-shadow: 0 0 10px rgba(0, 240, 255, 0.3); }
-        .neon-text { text-shadow: 0 0 5px #00f0ff, 0 0 10px #00f0ff; }
+        body { background-color: #F2F0EB; color: #1A1A1A; }
+        .brutal-border { border: 2px solid #3B3BE0; }
+        .brutal-card { background: white; border: 2px solid #3B3BE0; border-radius: 1rem; }
         .terminal-scroll::-webkit-scrollbar { width: 4px; }
-        .terminal-scroll::-webkit-scrollbar-thumb { background: #00f0ff; }
+        .terminal-scroll::-webkit-scrollbar-thumb { background: #3B3BE0; border-radius: 4px; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center py-10 px-4">
+<body class="min-h-screen flex flex-col items-center py-6 px-4 md:px-10">
 
     <!-- Header -->
-    <header class="w-full max-w-6xl mb-12 flex justify-between items-center">
-        <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-full border-2 border-cyber-neon flex items-center justify-center animate-pulse-glow bg-cyber-800">
-                <i class="fas fa-video text-cyber-neon text-2xl"></i>
-            </div>
-            <div>
-                <h1 class="text-4xl font-bold text-white tracking-wider">DEEP<span class="text-cyber-neon">DUB</span></h1>
-                <p class="text-cyber-neon/70 text-sm font-medium tracking-[0.2em] uppercase">AI Video Dubbing Architecture</p>
-            </div>
+    <header class="w-full max-w-6xl mb-16 flex justify-between items-center">
+        <div class="flex items-center gap-6">
+            <h1 class="text-2xl font-bold tracking-widest textDark">DEEP<span class="text-brandBlue">DUB</span></h1>
+            <nav class="hidden md:flex gap-6 text-sm font-medium text-textGray">
+                <a href="#" class="hover:text-brandBlue transition">HOME</a>
+                <a href="#" class="hover:text-brandBlue transition">MODELS</a>
+                <a href="#" class="hover:text-brandBlue transition">ABOUT US</a>
+            </nav>
         </div>
-        <div class="hidden md:flex items-center gap-6">
-            <div class="flex flex-col text-right">
-                <span class="text-xs text-gray-500 uppercase tracking-widest">Engine Status</span>
-                <span class="text-cyber-neon font-mono text-sm"><i class="fas fa-circle text-[8px] mr-1"></i> ONLINE</span>
-            </div>
-            <div class="flex flex-col text-right">
-                <span class="text-xs text-gray-500 uppercase tracking-widest">Model</span>
-                <span class="text-white font-mono text-sm">Gemini 1.5 + gTTS</span>
-            </div>
+        <div class="flex items-center gap-4">
+            <span class="text-sm font-semibold hidden md:inline">API <span class="text-brandBlue">ONLINE</span></span>
+            <button class="brutal-border px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-brandBlue hover:text-white transition flex items-center gap-2">
+                CONTACT US <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+            </button>
         </div>
     </header>
 
-    <main class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Hero Section -->
+    <div class="w-full max-w-6xl text-center mb-16 relative">
+        <h2 class="text-5xl md:text-7xl font-bold leading-tight mb-4">
+            <i class="fas fa-asterisk text-brandBlue mr-2 text-4xl align-top hidden md:inline-block"></i> 
+            LEVEL UP YOUR VIDEO <br> 
+            <span class="bg-brandLime px-4 py-1 rounded-full inline-flex items-center justify-center -translate-y-1"><i class="fas fa-arrow-right"></i></span> WITH AI DUBBING
+        </h2>
+        <div class="flex justify-between items-end mt-12 w-full max-w-4xl mx-auto px-4">
+            <div class="text-left hidden md:block">
+                <p class="text-sm text-textGray">With more than</p>
+                <p class="font-bold">2K+ VIDEOS DUBBED</p>
+                <p class="font-bold">50+ LANGUAGES</p>
+            </div>
+            <button class="bg-brandLime brutal-border text-textDark px-8 py-3 rounded-full font-bold text-lg hover:bg-brandBlue hover:text-white transition-colors flex items-center gap-2 mx-auto md:mx-0 shadow-[4px_4px_0_#3B3BE0] active:translate-y-1 active:shadow-[0_0_0_#3B3BE0] active:translate-x-1">
+                Join us <i class="fas fa-arrow-up-right-from-square text-sm"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Grid (Like 'Our Classes') -->
+    <main class="w-full max-w-6xl bg-white/60 brutal-border rounded-[2rem] p-6 md:p-10 mb-12 shadow-sm backdrop-blur-sm relative">
         
-        <!-- Left Col: Upload & Terminal -->
-        <div class="lg:col-span-4 space-y-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <h3 class="text-3xl font-bold">Our Workflow</h3>
+            <p class="text-sm text-textGray max-w-xs text-left md:text-right">
+                Here's our seamless workflow that will accompany you in translating any video instantly.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            <!-- Upload Panel -->
-            <div class="glass-panel rounded-2xl p-6 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-purple via-cyber-neon to-cyber-pink"></div>
-                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <i class="fas fa-upload text-cyber-purple"></i> INGEST MEDIA
-                </h2>
+            <!-- Upload Column -->
+            <div class="brutal-card p-5 flex flex-col shadow-[4px_4px_0_rgba(59,59,224,0.2)] relative overflow-hidden group border-brandBlue">
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="font-bold text-lg">1. Ingest Media</h4>
+                    <div class="w-8 h-8 rounded-full bg-brandBlue text-white flex items-center justify-center transform -rotate-45 group-hover:rotate-0 transition duration-300">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-textGray mb-6">For those of you who want to translate your local video.</p>
                 
-                <div id="dropzone" class="border-2 border-dashed border-cyber-700 hover:border-cyber-neon bg-cyber-800/50 rounded-xl p-8 text-center cursor-pointer transition duration-300 group">
-                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-600 group-hover:text-cyber-neon transition mb-3"></i>
-                    <h3 class="text-sm font-medium text-gray-300 group-hover:text-white transition">Select or drop video</h3>
-                    <p class="text-xs text-gray-500 mt-2">MP4, MOV (Max 50MB)</p>
+                <!-- Upload Box -->
+                <div id="dropzone" class="border-2 border-dashed border-brandBlue/30 hover:border-brandBlue bg-cream rounded-xl p-6 text-center cursor-pointer transition duration-300 flex-1 flex flex-col items-center justify-center min-h-[160px]">
+                    <i class="fas fa-cloud-upload-alt text-3xl text-brandBlue mb-2"></i>
+                    <h5 class="text-sm font-bold text-textDark">Select or drop video</h5>
+                    <p class="text-xs text-textGray mt-1">MP4, MOV (Max 50MB)</p>
                     <input type="file" id="fileInput" class="hidden" accept="video/mp4,video/quicktime,video/x-msvideo">
                 </div>
 
-                <div id="fileInfo" class="hidden mt-4 bg-cyber-800 rounded-lg p-3 flex justify-between items-center border border-cyber-700">
-                    <div class="flex items-center gap-3 overflow-hidden">
-                        <i class="fas fa-file-video text-cyber-neon"></i>
-                        <span id="fileName" class="text-sm text-gray-300 truncate">video.mp4</span>
+                <div id="fileInfo" class="hidden mt-4 bg-brandBlue/10 rounded-lg p-3 justify-between items-center brutal-border flex-1 min-h-[160px]">
+                    <div class="flex flex-col items-center justify-center gap-3 w-full overflow-hidden text-center">
+                        <i class="fas fa-file-video text-brandBlue text-4xl"></i>
+                        <span id="fileName" class="text-sm font-semibold truncate text-brandBlue w-full px-2">video.mp4</span>
+                        <button id="removeFile" class="mt-2 text-xs bg-white brutal-border px-3 py-1 rounded-full text-red-500 hover:text-white hover:bg-red-500 transition-colors font-bold"><i class="fas fa-times mr-1"></i> REMOVE</button>
                     </div>
-                    <button id="removeFile" class="text-gray-500 hover:text-cyber-pink"><i class="fas fa-times"></i></button>
                 </div>
-                
-                <div class="mt-6">
-                    <label class="block text-xs text-gray-500 uppercase tracking-widest mb-2">Target Language</label>
-                    <select id="langSelect" class="w-full bg-cyber-800 border border-cyber-700 text-white text-sm rounded-lg focus:ring-cyber-neon focus:border-cyber-neon block p-2.5">
+
+                <!-- Settings -->
+                <div class="mt-4">
+                    <select id="langSelect" class="w-full bg-cream brutal-border text-textDark text-sm font-bold rounded-lg focus:ring-brandBlue focus:border-brandBlue block p-2.5 appearance-none cursor-pointer">
                         <option value="en">English (US)</option>
                         <option value="es">Spanish</option>
                         <option value="fr">French</option>
@@ -115,84 +121,95 @@
                         <option value="id">Indonesian</option>
                     </select>
                 </div>
+            </div>
 
-                <button id="processBtn" disabled class="w-full mt-6 bg-cyber-700 text-gray-400 py-3 rounded-lg font-bold tracking-widest uppercase text-sm transition-all duration-300 relative overflow-hidden group">
-                    <span class="relative z-10" id="btnText">INITIALIZE DUBBING</span>
-                    <div class="absolute inset-0 h-full w-0 bg-gradient-to-r from-cyber-purple to-cyber-neon transition-all duration-300 ease-out group-hover:w-full z-0 opacity-0 group-hover:opacity-100 disabled:hidden"></div>
+            <!-- Original Video Column -->
+            <div class="brutal-card p-5 flex flex-col shadow-[4px_4px_0_rgba(59,59,224,0.2)] bg-brandBlue text-white relative">
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="font-bold text-lg">2. Original Video</h4>
+                    <div class="w-8 h-8 rounded-full bg-brandLime text-brandBlue flex items-center justify-center transform -rotate-45">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-white/80 mb-6">Review the source material before the AI processing.</p>
+                
+                <div class="flex-1 bg-black/30 rounded-xl overflow-hidden border border-white/20 flex items-center justify-center relative min-h-[160px]">
+                    <video id="originalVideo" class="w-full h-full object-cover hidden" controls></video>
+                    <div id="originalPlaceholder" class="text-white/50 text-center">
+                        <i class="fas fa-film text-3xl mb-2"></i>
+                        <p class="text-xs font-mono font-bold">NO MEDIA</p>
+                    </div>
+                </div>
+
+                <button id="processBtn" disabled class="w-full mt-4 bg-white/20 text-white/50 py-3 rounded-xl font-bold text-sm transition-all duration-300 brutal-border border-white/30 cursor-not-allowed">
+                    <span id="btnText">INITIALIZE</span>
                 </button>
             </div>
 
-            <!-- Terminal Panel -->
-            <div class="glass-panel rounded-2xl p-4 flex flex-col h-64 border border-cyber-700">
-                <div class="flex items-center justify-between border-b border-cyber-700 pb-2 mb-3">
-                    <div class="text-xs font-mono text-gray-400"><i class="fas fa-terminal mr-2 text-cyber-neon"></i>SYSTEM_LOGS</div>
-                    <div class="flex gap-1.5">
-                        <div class="w-2.5 h-2.5 rounded-full bg-cyber-pink"></div>
-                        <div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
-                        <div class="w-2.5 h-2.5 rounded-full bg-cyber-neon"></div>
+            <!-- Output Video Column -->
+            <div class="brutal-card p-5 flex flex-col shadow-[4px_4px_0_rgba(59,59,224,0.2)] relative overflow-hidden">
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="font-bold text-lg">3. Translated</h4>
+                    <div class="w-8 h-8 rounded-full bg-brandBlue text-white flex items-center justify-center transform -rotate-45">
+                        <i class="fas fa-arrow-right"></i>
                     </div>
                 </div>
-                <div id="terminal" class="flex-1 overflow-y-auto terminal-scroll font-mono text-xs space-y-2 text-gray-400">
-                    <div class="text-cyber-purple">> Awaiting input...</div>
+                <p class="text-xs text-textGray mb-6">The resulting video with generated voiceovers.</p>
+                
+                <div class="flex-1 bg-cream rounded-xl overflow-hidden brutal-border flex items-center justify-center relative min-h-[160px]">
+                    
+                    <div id="processingOverlay" class="absolute inset-0 bg-white/95 backdrop-blur-sm z-20 hidden flex-col items-center justify-center p-4">
+                        <div class="w-12 h-12 rounded-full border-4 border-cream border-t-brandBlue animate-spin mb-3"></div>
+                        <div class="font-bold text-brandBlue text-xs text-center" id="progressText">PROCESSING 0%</div>
+                        <div class="w-full h-2 bg-cream mt-3 rounded-full overflow-hidden brutal-border p-0">
+                            <div id="progressBar" class="h-full bg-brandLime w-0 transition-all duration-300"></div>
+                        </div>
+                    </div>
+
+                    <video id="processedVideo" class="w-full h-full object-cover hidden" controls></video>
+                    <div id="processedPlaceholder" class="text-brandBlue/40 text-center">
+                        <i class="fas fa-magic text-3xl mb-2"></i>
+                        <p class="text-xs font-mono font-bold">AWAITING</p>
+                    </div>
                 </div>
+
+                <div id="actionBar" class="mt-4 hidden h-[48px] flex">
+                    <a id="downloadBtn" href="#" download class="w-full h-full bg-brandLime text-textDark rounded-xl font-bold text-sm flex items-center justify-center gap-2 brutal-border shadow-[2px_2px_0_#3B3BE0] hover:bg-brandBlue hover:text-white transition-colors">
+                        <i class="fas fa-download"></i> EXPORT VIDEO
+                    </a>
+                </div>
+                <div id="actionPlaceholder" class="mt-4 h-[48px] border-2 border-dashed border-gray-200 rounded-xl bg-gray-50"></div>
             </div>
 
         </div>
 
-        <!-- Right Col: Video Players -->
-        <div class="lg:col-span-8 flex flex-col gap-6">
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
-                <!-- Original Video -->
-                <div class="glass-panel rounded-2xl p-4 flex flex-col">
-                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider mb-4 flex items-center gap-2">
-                        <i class="fas fa-video"></i> ORIGINAL SOURCE
-                    </h3>
-                    <div class="flex-1 bg-cyber-900 rounded-xl overflow-hidden border border-cyber-700 flex items-center justify-center relative group min-h-[300px]">
-                        <video id="originalVideo" class="w-full h-full object-cover hidden" controls></video>
-                        <div id="originalPlaceholder" class="text-cyber-700 text-center">
-                            <i class="fas fa-film text-4xl mb-2"></i>
-                            <p class="text-sm font-mono">NO SIGNAL</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Processed Video -->
-                <div class="glass-panel rounded-2xl p-4 flex flex-col relative overflow-hidden">
-                    <!-- Scanning Overlay -->
-                    <div id="processingOverlay" class="absolute inset-0 bg-cyber-900/90 backdrop-blur-sm z-20 hidden flex-col items-center justify-center">
-                        <div class="w-16 h-16 rounded-full border-2 border-transparent border-t-cyber-neon border-l-cyber-neon animate-spin mb-4"></div>
-                        <div class="font-mono text-cyber-neon text-sm tracking-widest animate-pulse" id="progressText">PROCESSING 0%</div>
-                        <div class="w-48 h-1 bg-cyber-800 mt-4 rounded-full overflow-hidden">
-                            <div id="progressBar" class="h-full bg-gradient-to-r from-cyber-purple to-cyber-neon w-0 transition-all duration-300"></div>
-                        </div>
-                    </div>
-
-                    <h3 class="text-sm font-semibold text-cyber-neon tracking-wider mb-4 flex items-center gap-2 neon-text">
-                        <i class="fas fa-language"></i> SYNTHESIZED OUTPUT
-                    </h3>
-                    <div class="flex-1 bg-cyber-900 rounded-xl overflow-hidden border border-cyber-neon flex items-center justify-center relative min-h-[300px] shadow-[0_0_15px_rgba(0,240,255,0.1)]">
-                        <video id="processedVideo" class="w-full h-full object-cover hidden" controls></video>
-                        <div id="processedPlaceholder" class="text-cyber-700 text-center">
-                            <i class="fas fa-wave-square text-4xl mb-2"></i>
-                            <p class="text-sm font-mono">AWAITING RENDERING</p>
-                        </div>
-                    </div>
+        <!-- Terminal Section -->
+        <div class="mt-12 pt-8 border-t-2 border-brandBlue/10 flex flex-col">
+            <h4 class="font-bold text-sm mb-3 text-textGray flex items-center gap-2"><i class="fas fa-terminal"></i> SYSTEM LOGS</h4>
+            <div class="bg-textDark rounded-xl p-4 h-32 brutal-border shadow-[4px_4px_0_rgba(59,59,224,0.2)]">
+                <div id="terminal" class="h-full overflow-y-auto terminal-scroll font-mono text-xs space-y-2 text-white/80">
+                    <div class="text-brandLime">> Awaiting user input...</div>
                 </div>
             </div>
-
-            <!-- Action Bar -->
-            <div id="actionBar" class="glass-panel rounded-2xl p-4 flex justify-between items-center hidden border-cyber-neon">
-                <div class="font-mono text-sm text-green-400 flex items-center gap-2">
-                    <i class="fas fa-check-circle"></i> RENDERING COMPLETE
-                </div>
-                <a id="downloadBtn" href="#" download class="bg-cyber-neon text-cyber-900 px-6 py-2 rounded-lg font-bold hover:bg-white transition-colors flex items-center gap-2">
-                    <i class="fas fa-download"></i> EXPORT VIDEO
-                </a>
-            </div>
-
         </div>
+
     </main>
+
+    <!-- Footer Quote -->
+    <footer class="w-full max-w-4xl text-center pb-10">
+        <div class="flex justify-center items-center mb-6 text-3xl text-brandBlue">
+            <i class="fas fa-asterisk"></i>
+        </div>
+        <h3 class="text-2xl md:text-4xl font-bold mb-4 leading-tight">
+            KEEP <span class="border-2 border-brandBlue rounded-full px-4 py-1 bg-white inline-block shadow-[2px_2px_0_#3B3BE0]">CREATING</span> UNTIL YOU <br> FIND YOUR OWN <span class="text-brandBlue">AUDIENCE.</span>
+        </h3>
+        <p class="text-sm font-medium mt-6">Defri Muhammad Fahrul Habiebi<br><span class="text-textGray font-bold">Ruang Edit Founder</span></p>
+        
+        <div class="flex justify-between items-center border-t border-textGray/30 mt-16 pt-6 text-xs text-textGray font-medium">
+            <span>Copyright RE Production</span>
+            <span>Vivi Alfiani &middot; 2024</span>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>

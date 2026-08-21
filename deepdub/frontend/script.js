@@ -15,6 +15,7 @@ const processingOverlay = document.getElementById('processingOverlay');
 const progressText = document.getElementById('progressText');
 const progressBar = document.getElementById('progressBar');
 const actionBar = document.getElementById('actionBar');
+const actionPlaceholder = document.getElementById('actionPlaceholder');
 const downloadBtn = document.getElementById('downloadBtn');
 
 let selectedFile = null;
@@ -24,13 +25,13 @@ function logTerminal(message, type = 'info') {
     const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: "numeric", minute: "numeric", second: "numeric" });
     const div = document.createElement('div');
     
-    let colorClass = 'text-gray-400';
-    if (type === 'success') colorClass = 'text-green-400';
-    if (type === 'error') colorClass = 'text-cyber-pink';
-    if (type === 'action') colorClass = 'text-cyber-neon';
+    let colorClass = 'text-white/80';
+    if (type === 'success') colorClass = 'text-brandLime';
+    if (type === 'error') colorClass = 'text-red-500';
+    if (type === 'action') colorClass = 'text-brandBlue';
     if (type === 'warning') colorClass = 'text-yellow-400';
 
-    div.innerHTML = `<span class="text-gray-600">[${time}]</span> <span class="${colorClass}">${message}</span>`;
+    div.innerHTML = `<span class="text-gray-500">[${time}]</span> <span class="${colorClass}">${message}</span>`;
     terminal.appendChild(div);
     terminal.scrollTop = terminal.scrollHeight;
 }
@@ -38,17 +39,20 @@ function logTerminal(message, type = 'info') {
 // Drag and drop handlers
 dropzone.addEventListener('dragover', (e) => {
     e.preventDefault();
-    dropzone.classList.add('border-cyber-neon', 'bg-cyber-800');
+    dropzone.classList.remove('border-brandBlue/30', 'bg-cream');
+    dropzone.classList.add('border-brandBlue', 'bg-brandBlue/10');
 });
 
 dropzone.addEventListener('dragleave', (e) => {
     e.preventDefault();
-    dropzone.classList.remove('border-cyber-neon', 'bg-cyber-800');
+    dropzone.classList.add('border-brandBlue/30', 'bg-cream');
+    dropzone.classList.remove('border-brandBlue', 'bg-brandBlue/10');
 });
 
 dropzone.addEventListener('drop', (e) => {
     e.preventDefault();
-    dropzone.classList.remove('border-cyber-neon', 'bg-cyber-800');
+    dropzone.classList.add('border-brandBlue/30', 'bg-cream');
+    dropzone.classList.remove('border-brandBlue', 'bg-brandBlue/10');
     if (e.dataTransfer.files.length > 0) {
         handleFileSelection(e.dataTransfer.files[0]);
     }
@@ -78,9 +82,10 @@ function handleFileSelection(file) {
     fileInfo.classList.remove('hidden');
     fileInfo.classList.add('flex');
     
+    // Enable Process Button
     processBtn.disabled = false;
-    processBtn.classList.remove('text-gray-400', 'bg-cyber-700');
-    processBtn.classList.add('text-white', 'bg-cyber-800', 'border', 'border-cyber-neon', 'shadow-[0_0_10px_rgba(0,240,255,0.3)]');
+    processBtn.classList.remove('bg-white/20', 'text-white/50', 'cursor-not-allowed');
+    processBtn.classList.add('bg-brandLime', 'text-textDark', 'shadow-[4px_4px_0_#3B3BE0]', 'hover:bg-brandBlue', 'hover:text-white', 'active:translate-y-1', 'active:translate-x-1', 'active:shadow-[0_0_0_#3B3BE0]', 'cursor-pointer');
 
     // Show preview
     const fileURL = URL.createObjectURL(file);
@@ -99,9 +104,10 @@ removeFileBtn.addEventListener('click', () => {
     fileInfo.classList.remove('flex');
     dropzone.classList.remove('hidden');
     
+    // Disable Process Button
     processBtn.disabled = true;
-    processBtn.classList.add('text-gray-400', 'bg-cyber-700');
-    processBtn.classList.remove('text-white', 'bg-cyber-800', 'border', 'border-cyber-neon', 'shadow-[0_0_10px_rgba(0,240,255,0.3)]');
+    processBtn.classList.add('bg-white/20', 'text-white/50', 'cursor-not-allowed');
+    processBtn.classList.remove('bg-brandLime', 'text-textDark', 'shadow-[4px_4px_0_#3B3BE0]', 'hover:bg-brandBlue', 'hover:text-white', 'active:translate-y-1', 'active:translate-x-1', 'active:shadow-[0_0_0_#3B3BE0]', 'cursor-pointer');
     
     originalVideo.src = '';
     originalVideo.classList.add('hidden');
@@ -121,11 +127,16 @@ processBtn.addEventListener('click', async () => {
     // UI Loading state
     processBtn.disabled = true;
     processBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> PROCESSING...';
+    processBtn.classList.add('bg-white/20', 'text-white/50', 'cursor-not-allowed');
+    processBtn.classList.remove('bg-brandLime', 'text-textDark', 'shadow-[4px_4px_0_#3B3BE0]', 'hover:bg-brandBlue', 'hover:text-white', 'active:translate-y-1', 'active:translate-x-1', 'active:shadow-[0_0_0_#3B3BE0]', 'cursor-pointer');
     
     processedPlaceholder.classList.add('hidden');
     processingOverlay.classList.remove('hidden');
     processingOverlay.classList.add('flex');
-    actionBar.classList.add('hidden');
+    
+    if(actionBar) actionBar.classList.add('hidden');
+    if(actionPlaceholder) actionPlaceholder.classList.remove('hidden');
+    
     processedVideo.classList.add('hidden');
     processedVideo.src = '';
     
@@ -197,7 +208,12 @@ function finishProcessing(videoUrl) {
     processedVideo.src = videoUrl;
     processedVideo.classList.remove('hidden');
     
-    actionBar.classList.remove('hidden');
+    if(actionBar) {
+        actionBar.classList.remove('hidden');
+        actionBar.classList.add('flex');
+    }
+    if(actionPlaceholder) actionPlaceholder.classList.add('hidden');
+    
     downloadBtn.href = videoUrl;
     
     resetProcessBtn();
@@ -206,7 +222,8 @@ function finishProcessing(videoUrl) {
 function resetProcessBtn() {
     processBtn.disabled = false;
     processBtn.innerHTML = `
-        <span class="relative z-10" id="btnText">INITIALIZE DUBBING</span>
-        <div class="absolute inset-0 h-full w-0 bg-gradient-to-r from-cyber-purple to-cyber-neon transition-all duration-300 ease-out group-hover:w-full z-0 opacity-0 group-hover:opacity-100 disabled:hidden"></div>
+        <span id="btnText">INITIALIZE</span>
     `;
+    processBtn.classList.remove('bg-white/20', 'text-white/50', 'cursor-not-allowed');
+    processBtn.classList.add('bg-brandLime', 'text-textDark', 'shadow-[4px_4px_0_#3B3BE0]', 'hover:bg-brandBlue', 'hover:text-white', 'active:translate-y-1', 'active:translate-x-1', 'active:shadow-[0_0_0_#3B3BE0]', 'cursor-pointer');
 }

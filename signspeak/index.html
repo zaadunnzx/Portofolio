@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignSpeak - Real-Time Sign Language Translator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- MediaPipe dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#F2F0EB',
+                        brandBlue: '#3B3BE0',
+                        brandLime: '#C6F045',
+                        brandPink: '#FF5E8E',
+                        textDark: '#1A1A1A',
+                        textGray: '#4D4D4D'
+                    },
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        mono: ['Courier New', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #F2F0EB; color: #1A1A1A; }
+        .brutal-border { border: 3px solid #1A1A1A; }
+        .brutal-card { background: white; border: 3px solid #1A1A1A; border-radius: 1rem; box-shadow: 6px 6px 0px #1A1A1A; }
+        .brutal-shadow-hover { transition: all 0.2s; }
+        .brutal-shadow-hover:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #1A1A1A; }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            overflow: hidden;
+        }
+        .input_video {
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+        }
+        .output_canvas {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col p-4 md:p-8 overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav class="w-full max-w-7xl mx-auto flex justify-between items-center mb-10 brutal-card px-6 py-4 rounded-full bg-cream">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-brandLime brutal-border flex items-center justify-center">
+                <i class="fas fa-sign-language text-xl"></i>
+            </div>
+            <h1 class="text-2xl font-bold tracking-tight">Sign<span class="text-brandBlue">Speak.</span></h1>
+        </div>
+        <div class="hidden md:flex items-center gap-4">
+            <span class="font-bold text-sm px-3 py-1 bg-white brutal-border rounded-full flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-brandPink animate-pulse"></div> CAMERA ACTIVE
+            </span>
+            <span class="font-bold text-sm px-3 py-1 bg-brandBlue text-white brutal-border rounded-full">
+                MEDIAPIPE AI
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 flex-1">
+        
+        <!-- Left: Camera Feed -->
+        <div class="lg:w-2/3 flex flex-col gap-4">
+            <div class="brutal-card p-2 flex-1 min-h-[400px] lg:min-h-[600px] relative rounded-3xl overflow-hidden flex flex-col">
+                <!-- Top bar -->
+                <div class="w-full h-12 border-b-3 border-textDark flex items-center px-4 justify-between bg-white z-20">
+                    <div class="flex gap-2">
+                        <div class="w-3 h-3 rounded-full border-2 border-textDark bg-brandPink"></div>
+                        <div class="w-3 h-3 rounded-full border-2 border-textDark bg-brandLime"></div>
+                        <div class="w-3 h-3 rounded-full border-2 border-textDark bg-brandBlue"></div>
+                    </div>
+                    <div class="font-mono text-sm font-bold">COMPUTER_VISION_FEED</div>
+                </div>
+                
+                <!-- Camera Area -->
+                <div class="flex-1 video-container relative rounded-b-[14px]">
+                    
+                    <div id="loading" class="absolute inset-0 flex flex-col items-center justify-center bg-brandBlue z-30 text-white">
+                        <i class="fas fa-spinner fa-spin text-5xl mb-4"></i>
+                        <h2 class="text-2xl font-bold">Loading Edge AI...</h2>
+                        <p class="mt-2 font-mono text-sm">Downloading MediaPipe Hands Model (20MB)</p>
+                    </div>
+
+                    <video class="input_video"></video>
+                    <canvas class="output_canvas"></canvas>
+                    
+                    <!-- Detected Letter Overlay -->
+                    <div class="absolute top-6 left-6 z-20 bg-brandLime brutal-border rounded-2xl p-4 shadow-[4px_4px_0_#1A1A1A]">
+                        <p class="text-xs font-bold uppercase mb-1">Detected Letter</p>
+                        <h2 id="currentLetter" class="text-6xl font-black text-center">-</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Text Output & Controls -->
+        <div class="lg:w-1/3 flex flex-col gap-6">
+            
+            <div class="brutal-card p-6 bg-brandLime flex flex-col relative overflow-hidden">
+                <i class="fas fa-quote-left absolute -top-4 -right-4 text-8xl opacity-10"></i>
+                <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fas fa-comment-dots"></i> Translated Text</h3>
+                
+                <div class="bg-white brutal-border rounded-xl p-4 h-48 mb-4 flex flex-col">
+                    <p id="translatedText" class="text-2xl font-bold flex-1 overflow-y-auto break-words"></p>
+                    <div class="text-right mt-2">
+                        <span id="cursor" class="inline-block w-3 h-6 bg-brandBlue animate-pulse"></span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="addSpaceBtn" class="brutal-border bg-white py-3 rounded-xl font-bold text-sm brutal-shadow-hover flex items-center justify-center gap-2">
+                        <i class="fas fa-ruler-horizontal"></i> SPACE
+                    </button>
+                    <button id="backspaceBtn" class="brutal-border bg-brandPink text-white py-3 rounded-xl font-bold text-sm brutal-shadow-hover flex items-center justify-center gap-2">
+                        <i class="fas fa-backspace"></i> DELETE
+                    </button>
+                </div>
+            </div>
+
+            <!-- Speech Synthesis -->
+            <div class="brutal-card p-6 bg-brandBlue text-white flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xl font-bold mb-2 flex items-center gap-2"><i class="fas fa-volume-up"></i> Voice Engine</h3>
+                    <p class="text-sm opacity-80 mb-6">Convert your translated sign language text into synthesized speech using Web Speech API.</p>
+                </div>
+                
+                <button id="speakBtn" class="w-full brutal-border border-white bg-brandLime text-textDark py-4 rounded-xl font-black text-xl brutal-shadow-hover flex items-center justify-center gap-3 shadow-[4px_4px_0_white]">
+                    <i class="fas fa-bullhorn"></i> SPEAK NOW
+                </button>
+                <button id="clearBtn" class="w-full mt-4 underline font-bold text-sm hover:text-brandLime transition-colors text-center">
+                    Clear Text Buffer
+                </button>
+            </div>
+            
+            <!-- Instructions -->
+            <div class="brutal-card p-6 bg-white flex-1">
+                <h3 class="text-lg font-bold mb-3 border-b-3 border-textDark pb-2"><i class="fas fa-info-circle text-brandBlue"></i> How to use</h3>
+                <ul class="text-sm font-medium space-y-3 mt-4">
+                    <li class="flex gap-2"><i class="fas fa-check text-brandLime mt-1"></i> Place your hand in front of the camera.</li>
+                    <li class="flex gap-2"><i class="fas fa-check text-brandLime mt-1"></i> The AI will detect ASL alphabet signs based on finger positioning.</li>
+                    <li class="flex gap-2"><i class="fas fa-check text-brandLime mt-1"></i> Hold the sign for 1.5 seconds to type the letter.</li>
+                    <li class="flex gap-2"><i class="fas fa-check text-brandLime mt-1"></i> Use 'Space' to separate words.</li>
+                </ul>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- Success Flash Overlay -->
+    <div id="flashOverlay" class="fixed inset-0 bg-brandLime/50 z-50 pointer-events-none opacity-0 transition-opacity duration-300"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
