@@ -82,9 +82,9 @@ function onResults(results) {
     if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
         for (const landmarks of results.multiHandLandmarks) {
             
-            // 1. Draw Hand Skeleton (Neobrutalism Style)
-            drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {color: '#1A1A1A', lineWidth: 5});
-            drawLandmarks(canvasCtx, landmarks, {color: '#C6F045', lineWidth: 2, fillColor: '#3B3BE0', radius: 5});
+            // 1. Draw Hand Skeleton (Glassmorphism Forest Style)
+            drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {color: 'rgba(225, 244, 232, 0.5)', lineWidth: 3});
+            drawLandmarks(canvasCtx, landmarks, {color: '#34d399', lineWidth: 2, fillColor: '#082f1b', radius: 4});
 
             // 2. Detect Sign
             const states = checkFingerStates(landmarks);
