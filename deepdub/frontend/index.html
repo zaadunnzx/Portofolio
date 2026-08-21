@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepDub: AI Video Translator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            900: '#0a0a0f',
+                            800: '#13131f',
+                            700: '#1c1c2e',
+                            neon: '#00f0ff',
+                            pink: '#ff003c',
+                            purple: '#b026ff'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        mono: ['Courier New', 'monospace']
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { opacity: 1, boxShadow: '0 0 10px #00f0ff' },
+                            '50%': { opacity: .5, boxShadow: '0 0 20px #00f0ff' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0a0a0f; color: #e2e8f0; }
+        .glass-panel {
+            background: rgba(19, 19, 31, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05);
+        }
+        .neon-border { border: 1px solid #00f0ff; box-shadow: 0 0 10px rgba(0, 240, 255, 0.3); }
+        .neon-text { text-shadow: 0 0 5px #00f0ff, 0 0 10px #00f0ff; }
+        .terminal-scroll::-webkit-scrollbar { width: 4px; }
+        .terminal-scroll::-webkit-scrollbar-thumb { background: #00f0ff; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-10 px-4">
+
+    <!-- Header -->
+    <header class="w-full max-w-6xl mb-12 flex justify-between items-center">
+        <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-full border-2 border-cyber-neon flex items-center justify-center animate-pulse-glow bg-cyber-800">
+                <i class="fas fa-video text-cyber-neon text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="text-4xl font-bold text-white tracking-wider">DEEP<span class="text-cyber-neon">DUB</span></h1>
+                <p class="text-cyber-neon/70 text-sm font-medium tracking-[0.2em] uppercase">AI Video Dubbing Architecture</p>
+            </div>
+        </div>
+        <div class="hidden md:flex items-center gap-6">
+            <div class="flex flex-col text-right">
+                <span class="text-xs text-gray-500 uppercase tracking-widest">Engine Status</span>
+                <span class="text-cyber-neon font-mono text-sm"><i class="fas fa-circle text-[8px] mr-1"></i> ONLINE</span>
+            </div>
+            <div class="flex flex-col text-right">
+                <span class="text-xs text-gray-500 uppercase tracking-widest">Model</span>
+                <span class="text-white font-mono text-sm">Gemini 1.5 + gTTS</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Col: Upload & Terminal -->
+        <div class="lg:col-span-4 space-y-6">
+            
+            <!-- Upload Panel -->
+            <div class="glass-panel rounded-2xl p-6 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-purple via-cyber-neon to-cyber-pink"></div>
+                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <i class="fas fa-upload text-cyber-purple"></i> INGEST MEDIA
+                </h2>
+                
+                <div id="dropzone" class="border-2 border-dashed border-cyber-700 hover:border-cyber-neon bg-cyber-800/50 rounded-xl p-8 text-center cursor-pointer transition duration-300 group">
+                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-600 group-hover:text-cyber-neon transition mb-3"></i>
+                    <h3 class="text-sm font-medium text-gray-300 group-hover:text-white transition">Select or drop video</h3>
+                    <p class="text-xs text-gray-500 mt-2">MP4, MOV (Max 50MB)</p>
+                    <input type="file" id="fileInput" class="hidden" accept="video/mp4,video/quicktime,video/x-msvideo">
+                </div>
+
+                <div id="fileInfo" class="hidden mt-4 bg-cyber-800 rounded-lg p-3 flex justify-between items-center border border-cyber-700">
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <i class="fas fa-file-video text-cyber-neon"></i>
+                        <span id="fileName" class="text-sm text-gray-300 truncate">video.mp4</span>
+                    </div>
+                    <button id="removeFile" class="text-gray-500 hover:text-cyber-pink"><i class="fas fa-times"></i></button>
+                </div>
+                
+                <div class="mt-6">
+                    <label class="block text-xs text-gray-500 uppercase tracking-widest mb-2">Target Language</label>
+                    <select id="langSelect" class="w-full bg-cyber-800 border border-cyber-700 text-white text-sm rounded-lg focus:ring-cyber-neon focus:border-cyber-neon block p-2.5">
+                        <option value="en">English (US)</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="ja">Japanese</option>
+                        <option value="id">Indonesian</option>
+                    </select>
+                </div>
+
+                <button id="processBtn" disabled class="w-full mt-6 bg-cyber-700 text-gray-400 py-3 rounded-lg font-bold tracking-widest uppercase text-sm transition-all duration-300 relative overflow-hidden group">
+                    <span class="relative z-10" id="btnText">INITIALIZE DUBBING</span>
+                    <div class="absolute inset-0 h-full w-0 bg-gradient-to-r from-cyber-purple to-cyber-neon transition-all duration-300 ease-out group-hover:w-full z-0 opacity-0 group-hover:opacity-100 disabled:hidden"></div>
+                </button>
+            </div>
+
+            <!-- Terminal Panel -->
+            <div class="glass-panel rounded-2xl p-4 flex flex-col h-64 border border-cyber-700">
+                <div class="flex items-center justify-between border-b border-cyber-700 pb-2 mb-3">
+                    <div class="text-xs font-mono text-gray-400"><i class="fas fa-terminal mr-2 text-cyber-neon"></i>SYSTEM_LOGS</div>
+                    <div class="flex gap-1.5">
+                        <div class="w-2.5 h-2.5 rounded-full bg-cyber-pink"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-cyber-neon"></div>
+                    </div>
+                </div>
+                <div id="terminal" class="flex-1 overflow-y-auto terminal-scroll font-mono text-xs space-y-2 text-gray-400">
+                    <div class="text-cyber-purple">> Awaiting input...</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Col: Video Players -->
+        <div class="lg:col-span-8 flex flex-col gap-6">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+                <!-- Original Video -->
+                <div class="glass-panel rounded-2xl p-4 flex flex-col">
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider mb-4 flex items-center gap-2">
+                        <i class="fas fa-video"></i> ORIGINAL SOURCE
+                    </h3>
+                    <div class="flex-1 bg-cyber-900 rounded-xl overflow-hidden border border-cyber-700 flex items-center justify-center relative group min-h-[300px]">
+                        <video id="originalVideo" class="w-full h-full object-cover hidden" controls></video>
+                        <div id="originalPlaceholder" class="text-cyber-700 text-center">
+                            <i class="fas fa-film text-4xl mb-2"></i>
+                            <p class="text-sm font-mono">NO SIGNAL</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Processed Video -->
+                <div class="glass-panel rounded-2xl p-4 flex flex-col relative overflow-hidden">
+                    <!-- Scanning Overlay -->
+                    <div id="processingOverlay" class="absolute inset-0 bg-cyber-900/90 backdrop-blur-sm z-20 hidden flex-col items-center justify-center">
+                        <div class="w-16 h-16 rounded-full border-2 border-transparent border-t-cyber-neon border-l-cyber-neon animate-spin mb-4"></div>
+                        <div class="font-mono text-cyber-neon text-sm tracking-widest animate-pulse" id="progressText">PROCESSING 0%</div>
+                        <div class="w-48 h-1 bg-cyber-800 mt-4 rounded-full overflow-hidden">
+                            <div id="progressBar" class="h-full bg-gradient-to-r from-cyber-purple to-cyber-neon w-0 transition-all duration-300"></div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-sm font-semibold text-cyber-neon tracking-wider mb-4 flex items-center gap-2 neon-text">
+                        <i class="fas fa-language"></i> SYNTHESIZED OUTPUT
+                    </h3>
+                    <div class="flex-1 bg-cyber-900 rounded-xl overflow-hidden border border-cyber-neon flex items-center justify-center relative min-h-[300px] shadow-[0_0_15px_rgba(0,240,255,0.1)]">
+                        <video id="processedVideo" class="w-full h-full object-cover hidden" controls></video>
+                        <div id="processedPlaceholder" class="text-cyber-700 text-center">
+                            <i class="fas fa-wave-square text-4xl mb-2"></i>
+                            <p class="text-sm font-mono">AWAITING RENDERING</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Bar -->
+            <div id="actionBar" class="glass-panel rounded-2xl p-4 flex justify-between items-center hidden border-cyber-neon">
+                <div class="font-mono text-sm text-green-400 flex items-center gap-2">
+                    <i class="fas fa-check-circle"></i> RENDERING COMPLETE
+                </div>
+                <a id="downloadBtn" href="#" download class="bg-cyber-neon text-cyber-900 px-6 py-2 rounded-lg font-bold hover:bg-white transition-colors flex items-center gap-2">
+                    <i class="fas fa-download"></i> EXPORT VIDEO
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
