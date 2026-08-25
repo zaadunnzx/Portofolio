@@ -1,0 +1,217 @@
+:root {
+  --bg-color: #111111;
+  --canvas-bg: #0a0a0a;
+  --panel-bg: #181818;
+  --panel-border: #2e2e2e;
+  --text-primary: #ededed;
+  --text-secondary: #888888;
+  --accent: #18a0fb;
+  --accent-hover: #0d8de0;
+  --danger: #f24822;
+  --selection-color: rgba(24, 160, 251, 0.2);
+  --header-height: 52px;
+  --sidebar-width: 250px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--canvas-bg);
+  background-image: radial-gradient(#333 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: 0 0;
+  color: var(--text-primary);
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+body.light-theme {
+  --bg-color: #ffffff;
+  --canvas-bg: #f9f9f9;
+  --panel-bg: #ffffff;
+  --panel-border: #e6e6e6;
+  --text-primary: #111111;
+  --text-secondary: #666666;
+  background-image: radial-gradient(#d5d5d5 1px, transparent 1px);
+}
+
+
+/* Base layouts */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - var(--header-height));
+}
+
+.panel {
+  background: var(--panel-bg);
+  border-right: 1px solid var(--panel-border);
+  width: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+}
+.panel.right {
+  border-right: none;
+  border-left: 1px solid var(--panel-border);
+  box-shadow: -2px 0 10px rgba(0,0,0,0.05);
+}
+
+.top-bar {
+  height: var(--header-height);
+  background: var(--panel-bg);
+  border-bottom: 1px solid var(--panel-border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  justify-content: space-between;
+  z-index: 20;
+}
+
+.canvas-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* UI Elements */
+.tool-group {
+  display: flex;
+  gap: 4px;
+}
+
+button.tool-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+button.tool-btn:hover {
+  background: rgba(128,128,128,0.1);
+  color: var(--text-primary);
+}
+
+button.tool-btn.active {
+  background: var(--selection-color);
+  color: var(--accent);
+  border: 1px solid rgba(24, 160, 251, 0.3);
+}
+
+/* Sidebar lists */
+.layer-item {
+  padding: 6px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: background 0.1s;
+}
+.layer-item:hover {
+  background: rgba(128,128,128,0.05);
+}
+.layer-item.selected {
+  background: var(--selection-color);
+}
+
+/* Properties */
+.prop-section {
+  padding: 16px;
+  border-bottom: 1px solid var(--panel-border);
+}
+.prop-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+.prop-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+.prop-input {
+  background: rgba(128,128,128,0.05);
+  border: 1px solid transparent;
+  color: var(--text-primary);
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  width: 100%;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+.prop-input:hover {
+  border-color: var(--panel-border);
+  background: rgba(128,128,128,0.08);
+}
+.prop-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(128,128,128,0.12);
+  box-shadow: 0 0 0 2px rgba(24, 160, 251, 0.2);
+}
+.prop-input[type="color"] {
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.prop-input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.prop-input[type="color"]::-webkit-color-swatch {
+  border: 1px solid #444;
+  border-radius: 4px;
+}
+.prop-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  width: 20px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
