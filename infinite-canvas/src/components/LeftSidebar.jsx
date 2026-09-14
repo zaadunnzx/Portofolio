@@ -45,67 +45,67 @@ const LeftSidebar = ({ shapes, selectedShapeIds, setSelectedShapeIds, updateShap
 
   return (
     <div className="panel left" style={{ overflowY: 'auto' }}>
-      <div style={{ 
-        padding: '14px 16px', 
-        borderBottom: '1px solid var(--panel-border)', 
-        fontSize: '10px', 
-        fontWeight: 700, 
-        color: 'var(--text-secondary)', 
+      <div style={{
+        padding: '14px 16px',
+        borderBottom: '1px solid var(--panel-border)',
+        fontSize: '10px',
+        fontWeight: 700,
+        color: 'var(--text-secondary)',
         letterSpacing: '1.2px',
         textTransform: 'uppercase'
       }}>
         Layers
-        <span style={{ 
-          marginLeft: '8px', 
-          fontSize: '10px', 
-          opacity: 0.5, 
-          fontWeight: 400, 
-          letterSpacing: 0 
+        <span style={{
+          marginLeft: '8px',
+          fontSize: '10px',
+          opacity: 0.5,
+          fontWeight: 400,
+          letterSpacing: 0
         }}>
           {shapeEntries.length}
         </span>
       </div>
       <div style={{ padding: '4px 0' }}>
         {shapeEntries.length === 0 && (
-          <div style={{ 
-            padding: '40px 16px', 
-            textAlign: 'center', 
-            fontSize: '11px', 
-            color: 'var(--text-secondary)', 
-            opacity: 0.5 
+          <div style={{
+            padding: '40px 16px',
+            textAlign: 'center',
+            fontSize: '11px',
+            color: 'var(--text-secondary)',
+            opacity: 0.5
           }}>
-            No layers yet.<br/>Draw something to get started.
+            No layers yet.<br />Draw something to get started.
           </div>
         )}
         {shapeEntries.map(([id, shape]) => (
-          <div 
+          <div
             key={id}
             className={`layer-item ${selectedShapeIds && selectedShapeIds.includes(id) ? 'selected' : ''}`}
             onClick={(e) => {
-               if (renamingId) return;
-               if (e.ctrlKey || e.metaKey || e.shiftKey) {
-                  if (selectedShapeIds.includes(id)) {
-                     setSelectedShapeIds(selectedShapeIds.filter(sid => sid !== id));
-                  } else {
-                     setSelectedShapeIds([...selectedShapeIds, id]);
-                  }
-               } else {
-                  setSelectedShapeIds([id]);
-               }
+              if (renamingId) return;
+              if (e.ctrlKey || e.metaKey || e.shiftKey) {
+                if (selectedShapeIds.includes(id)) {
+                  setSelectedShapeIds(selectedShapeIds.filter(sid => sid !== id));
+                } else {
+                  setSelectedShapeIds([...selectedShapeIds, id]);
+                }
+              } else {
+                setSelectedShapeIds([id]);
+              }
             }}
             onDoubleClick={(e) => handleDoubleClick(e, id, shape)}
-            style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
               opacity: shape.isLocked ? 0.5 : (shape.isHidden ? 0.35 : 1),
               minHeight: '32px'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, overflow: 'hidden' }}>
               <span style={{ color: 'var(--accent)', opacity: 0.6, flexShrink: 0 }}>{getIcon(shape.type)}</span>
-              
+
               {renamingId === id ? (
-                <input 
+                <input
                   autoFocus
                   value={renameValue}
                   onChange={(e) => setRenameValue(e.target.value)}
@@ -128,16 +128,16 @@ const LeftSidebar = ({ shapes, selectedShapeIds, setSelectedShapeIds, updateShap
                   }}
                 />
               ) : (
-                <span style={{ 
-                  overflow: 'hidden', 
-                  textOverflow: 'ellipsis', 
+                <span style={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
                   fontSize: '11px'
                 }}>
                   {shape.name || getDefaultName(shape.type)}
                   {shape.groupId && (
                     <span style={{
-                      fontSize: '9px', 
+                      fontSize: '9px',
                       marginLeft: '6px',
                       padding: '1px 4px',
                       borderRadius: '3px',
@@ -155,12 +155,12 @@ const LeftSidebar = ({ shapes, selectedShapeIds, setSelectedShapeIds, updateShap
             {/* Action icons */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '2px', flexShrink: 0 }}>
               {/* Visibility toggle */}
-              <div 
-                style={{ 
-                  color: 'var(--text-secondary)', 
-                  cursor: 'pointer', 
-                  display: 'flex', 
-                  alignItems: 'center', 
+              <div
+                style={{
+                  color: 'var(--text-secondary)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
                   padding: '4px',
                   borderRadius: '4px',
                   transition: 'background 0.1s'
@@ -173,14 +173,14 @@ const LeftSidebar = ({ shapes, selectedShapeIds, setSelectedShapeIds, updateShap
               >
                 {shape.isHidden ? <EyeOff size={13} style={{ opacity: 0.6 }} /> : <Eye size={13} style={{ opacity: 0.3 }} />}
               </div>
-              
+
               {/* Lock toggle */}
-              <div 
-                style={{ 
-                  color: 'var(--text-secondary)', 
-                  cursor: 'pointer', 
-                  display: 'flex', 
-                  alignItems: 'center', 
+              <div
+                style={{
+                  color: 'var(--text-secondary)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
                   padding: '4px',
                   borderRadius: '4px',
                   transition: 'background 0.1s'
